@@ -1,4 +1,8 @@
-`xact` is a recipe for handling transactions sensibly in Django applications on PostgreSQL.
+## `xact` is a recipe for handling transactions sensibly in Django applications on PostgreSQL.
+
+**Note**: As of Django 1.6, the functionality of `xact` will be merged into the Django core as the [`atomic` decorator](https://docs.djangoproject.com/en/dev/topics/db/transactions/#django.db.transaction.atomic).
+Code that uses `xact` should be able to be migrated to `atomic` with just a search-and-replace. `atomic` works on
+databases other than PostgreSQL, is thread-safe, and has other nice features; switch to it when you can!
 
 The goals are:
 
@@ -29,6 +33,10 @@ This recipe a few other nice features:
 * `xact()` works around an [outstanding bug](https://code.djangoproject.com/ticket/16047) in Django's transaction handling on psycopg2.
 
 `xact()` also supports the `using` parameter for [multiple databases](https://docs.djangoproject.com/en/dev/topics/db/multi-db/).
+
+`Rollback` is a supplied exception class designed for situations in which you want to trigger an exception to cause a rollback, but do not want that exception
+to propagate beyond the scope of the `xact` block.  `xact` will perform the
+rollback, then swallow the exception.
 
 Of course, a few caveats:
 
